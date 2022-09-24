@@ -1,8 +1,56 @@
 import { render, screen } from '@testing-library/react';
+import * as axios from "axios";
+import { act } from 'react-dom/test-utils';
 import App from './App';
 
-test('renders learn react link', () => {
+
+jest.mock("axios");
+
+
+test('Should show Loading button on first render', async () => {
+  axios.get.mockImplementation((url) => {
+    if (url === "https://jsramverk-editor-beha20.azurewebsites.net/doc") {
+      return Promise.resolve(mockResponse)
+    }
+  })
+  
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+
+  const element = screen.queryByText("Loading please wait...")
+  
+  expect(element).toBeInTheDocument()
 });
+
+test('Should show post button after successful api call', async () => {
+  axios.get.mockImplementation((url) => {
+    if (url === "https://jsramverk-editor-beha20.azurewebsites.net/doc") {
+      return Promise.resolve(mockResponse)
+    }
+  })
+
+  await act(async () => {
+    render(<App />);
+  })
+
+  const element = screen.queryByText("Post")
+
+  expect(element).toBeInTheDocument()
+});
+
+test('renders a select box', () => {
+  render(<App />);
+  
+  const selectText = screen.getByText("Choose a document");
+
+  expect(selectText).toBeInTheDocument();
+});
+
+const mockResponse = {
+  data: [
+    {
+      _id: "test",
+      name: "test",
+      html: "test"
+    }
+  ]
+}
