@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Col, Container, Nav, Row } from 'react-bootstrap'
+import { Button, Col, Container, Row } from 'react-bootstrap'
 import { useNavigate } from "react-router-dom";
 function Main() {
     const navigate = useNavigate();

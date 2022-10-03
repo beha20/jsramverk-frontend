@@ -53,6 +53,7 @@ function UpdateDoc() {
         if(newDoc._id !== ""){
             socket.emit("create", newDoc._id)
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
 
     useEffect(() => {
@@ -62,6 +63,7 @@ function UpdateDoc() {
                 setInputText(data.html, false)
             })
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[socket])
     
     return (
