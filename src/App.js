@@ -27,9 +27,9 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter className="App">
-      <Navbar />
-      <Routes>
+    <BrowserRouter basename="/~beha20/editor/" className="App">
+      {/* <Navbar /> need to fix */}
+      <Routes >
         <Route path="/" element={<Main />} />
         <Route path="/docs" element={<DocList docs={docs} />} />
         <Route path="/create" element={<TextEditor />} />
