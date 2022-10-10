@@ -1,3 +1,4 @@
+import React from "react";
 import parse from "html-react-parser";
 import { Button, Col, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";

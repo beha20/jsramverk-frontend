@@ -1,3 +1,5 @@
+import React from "react";
+
 const Options = ({ docs, handleOptionsChange }) => {
   return (
     <>
