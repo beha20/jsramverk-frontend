@@ -20,21 +20,18 @@ function setInputText(text) {
 function UpdateDoc() {
     const location = useLocation();
     const navigate = useNavigate();
+    const currentUser = useCurrentUser();
     const [newDoc, setNewDoc] = useState({
-        _id: location.state.doc._id,
-        name: location.state.doc.name,
-        html: location.state.doc.html,
+      _id: location.state ? location.state.doc._id : '',
+      name: location.state ? location.state.doc.name : '',
+      html: location.state ? location.state.doc.html : '',
     });
     const [errorMessage, setErrorMessage] = useState(null);
-    const currentUser = useCurrentUser();
-    if (!currentUser || currentUser === {}) {
-        navigate("/login");
-    }
 
     const handleChange = (text) => {
-        setNewDoc((prev) => {
-            return { ...prev, html:text}
-        })
+      setNewDoc((prev) => {
+          return { ...prev, html:text}
+      })
     }
 
     const handleUpdate = async() => {
@@ -52,7 +49,7 @@ function UpdateDoc() {
           }).then((result) => {
             setErrorMessage(null);
             alert("updated successfully");
-            navigate('/');
+            navigate('/docs');
           }).catch((err) => {
             setErrorMessage(err.response.data.message);
           });
@@ -63,6 +60,10 @@ function UpdateDoc() {
     }
 
     useEffect(() => {
+      if (!currentUser || currentUser === {}) {
+        navigate("/login");
+      }
+
       if (newDoc._id !== "") {
           socket.emit("create", newDoc._id);
       }
@@ -71,6 +72,7 @@ function UpdateDoc() {
 
     useEffect(() => {
         if(newDoc._id !== ""){
+            // setInputText(newDoc.html, false);
             socket.on("update", (data) => {
               setInputText(data.html);
             });
@@ -114,8 +116,8 @@ function UpdateDoc() {
                 <Button className="m-4" variant="dark"  style={{padding:"5px 40px"}} onClick={handleUpdate} >
                     Update
                 </Button>
-                <Button variant="dark"  style={{padding:"5px 40px"}} onClick={() => navigate('/')} >
-                    Main
+                <Button variant="dark"  style={{padding:"5px 40px"}} onClick={() => navigate('/docs')} >
+                    Doc List
                 </Button>
               </div>
             </Row>

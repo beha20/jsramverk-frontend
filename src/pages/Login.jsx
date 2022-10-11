@@ -29,11 +29,9 @@ function Login() {
         password: password
       }
     }).then((result) => {
-      console.log(result);
       localStorage.setItem('user', JSON.stringify(result.data));
       navigate('/');
     }).catch((err) => {
-      console.log(err);
       setErrorMessage(err.response.data.message);
     });
   }
@@ -61,7 +59,7 @@ function Login() {
       <Row >
         <Col>
           <Button className="m-4" variant="dark" onClick={login}>Login</Button>
-          <Button variant="dark" onClick={() => navigate('/register')}>Register</Button>
+          <Button variant="dark" onClick={() => navigate('/signup')}>SignUp</Button>
         </Col>
       </Row>
     </Container>

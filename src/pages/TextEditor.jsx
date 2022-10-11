@@ -20,10 +20,7 @@ export default function TextEditor() {
   const currentUser = useCurrentUser();
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState(null);
-  if (!currentUser) {
-    navigate('/login');
-  }
-
+  
   const getDocs = async () => {
     setLoading(true);
     try {
@@ -100,13 +97,8 @@ export default function TextEditor() {
     setValue({ html, name: text });
   };
 
-  useEffect(() => {
-    getDocs();
-  }, [change]);
-
   const handleOptionsChange = (e) => {
     if (e.target.value === "none") return setSelectedDocument(false);
-    console.log(e.target.value);
     const document = docs.find((doc) => doc._id === e.target.value);
     setValue({ html: document.html, name: document.name });
     setSelectedDocument(document);
@@ -116,6 +108,16 @@ export default function TextEditor() {
     localStorage.removeItem("user");
     navigate('/login');
   }
+
+  useEffect(() => {
+    if (!currentUser) {
+      navigate('/login');
+    }
+  }, []);
+
+  useEffect(() => {
+    getDocs();
+  }, [change]);
 
   return (
     <>
@@ -146,7 +148,7 @@ export default function TextEditor() {
                     ? "Update"
                     : "Post"}
               </Button>
-              <Button variant="dark" onClick={() => navigate('/')}>Main</Button>
+              <Button variant="dark" onClick={() => navigate('/docs')}>Doc List</Button>
             </div>
           </>
           )
