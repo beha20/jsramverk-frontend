@@ -19,13 +19,25 @@ function DocList() {
     const BASE_URL = process.env.REACT_APP_BASE_URL;
     
     try {
-      axios.get(`${BASE_URL}/doc`, {
+      /* axios.get(`${BASE_URL}/doc`, {
         headers: {
           'Content-Type': 'application/json',
           'x-access-token': currentUser.accessToken
         }
       }).then((result) => {
         setDocs(result.data);
+      }).catch((err) => {
+        setDocs([]);
+      }); */
+      axios.post(`${BASE_URL}/graphql`, {
+          query: "{docs {name html}}"
+        },{
+          headers: {
+            'Content-Type': 'application/json',
+            'x-access-token': currentUser.accessToken
+          }
+      }).then((result) => {
+        setDocs(result.data.data.docs);
       }).catch((err) => {
         setDocs([]);
       });
