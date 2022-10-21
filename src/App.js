@@ -2,10 +2,11 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import DocList from "./pages/DocList";
 import Main from "./pages/Main";
-import Login from "./pages/Login";
+import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
-import TextEditor from "./pages/TextEditor";
-import UpdateDoc from "./pages/UpdateDoc";
+import NewDoc from "./pages/NewDoc";
+import EditDoc from "./pages/EditDoc";
+import Comment from "./pages/Comment";
 
 
 function App() {
@@ -14,11 +15,12 @@ function App() {
       {/* <Navbar /> need to fix */}
       <Routes >
         <Route path="/" element={<Main />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/docs" element={<DocList />} />
-        <Route path="/create" element={<TextEditor />} />
-        <Route path="/edit" element={<UpdateDoc />} />
+        <Route path="/create" element={<NewDoc />} />
+        <Route path="/edit" element={<EditDoc />} />
+        <Route path="/comment" element={<Comment />} />
       </Routes>
     </BrowserRouter>
   );

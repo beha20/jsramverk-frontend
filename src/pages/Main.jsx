@@ -9,14 +9,14 @@ function Main() {
 
   useEffect(() => {
     if (!currentUser || currentUser === {}) {
-      navigate("/login");
+      navigate("/signin");
     }
   }, []);
   
-  const logout = (e) => {
+  const signout = (e) => {
     e.preventDefault();
     localStorage.removeItem("user");
-    navigate("/login");
+    navigate("/signin");
   }
 
   return (
@@ -26,10 +26,10 @@ function Main() {
       </Row>
       <Row >
         <Col>
-          <Button className="m-4" variant="dark" onClick={() => navigate('/create')}>Create Document</Button>
-          <Button variant="dark" onClick={() => navigate('/docs')}>All Documents</Button>
+          <Button className="m-4" variant="primary" onClick={() => navigate('/create')}>New Document</Button>
+          <Button variant="success" onClick={() => navigate('/docs')}>All Documents</Button>
           {currentUser &&
-            <Button className="m-4" variant="dark" onClick={logout}>Logout</Button>
+            <Button className="m-4" variant="dark" onClick={signout}>Sign Out</Button>
           }
         </Col>
       </Row>

@@ -5,83 +5,76 @@ import useCurrentUser from "../hooks/useCurrentUser";
 import {useNavigate} from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import useDocuments from "../hooks/useDocuments";
 
-function DocList() {
-  const [docs, setDocs] = useState([]);
+const DocList = () => {
   const navigate = useNavigate();
   const currentUser = useCurrentUser();
+  const {getDocuments} = useDocuments(currentUser?.accessToken);
+  const [docs, setDocs] = useState([]);
     
-  useEffect(() => {
-    if (!currentUser || currentUser === {}) {
-      navigate("/login");
-    }
-    
-    const BASE_URL = process.env.REACT_APP_BASE_URL;
-    
-    try {
-      /* axios.get(`${BASE_URL}/doc`, {
-        headers: {
-          'Content-Type': 'application/json',
-          'x-access-token': currentUser.accessToken
-        }
-      }).then((result) => {
-        setDocs(result.data);
-      }).catch((err) => {
-        setDocs([]);
-      }); */
-      axios.post(`${BASE_URL}/graphql`, {
-          query: "{docs {name html}}"
-        },{
-          headers: {
-            'Content-Type': 'application/json',
-            'x-access-token': currentUser.accessToken
-          }
-      }).then((result) => {
-        setDocs(result.data.data.docs);
-      }).catch((err) => {
-        setDocs([]);
+  const getDocs = async () => {
+    const {data, isError, error} = await getDocuments();
+    if (!isError) {
+      setDocs(data);
+    } else {
+      toast.error(error.message, {
+        position: "top-right",
+        theme: "dark"
       });
-    } catch (err) {
       setDocs([]);
     }
+  }
+
+  useEffect(() => {
+    if (!currentUser || currentUser === {}) {
+      navigate("/signin");
+    }
+    
+    getDocs();
   }, []);
 
   return (
     <>
-    {(docs && docs.length > 0) ? (
       <Container style={{margin:"40px auto"}}>
-        <Row style={{borderBottom:"3px solid black", marginBottom:"20px"}}>
-          <Col md={4}><h4>Document Name</h4></Col>
-          <Col md={4}><h4>Content</h4></Col>
-          <Col md={4}><h4>Action</h4></Col>
+        <ToastContainer />
+        <Row className="text-center">
+          <Col>
+            <h1 className="text-primary mb-4">Document List</h1>
+          </Col>
         </Row>
-        <Row>
-          {docs.map((doc, index) => (
+        <Row style={{borderBottom:"3px solid black", marginBottom:"20px"}}>
+          <Col md={1}><h4>Type</h4></Col>
+          <Col md={2}><h4>Name</h4></Col>
+          <Col md={3}><h4>Content</h4></Col>
+          <Col md={2}><h4>Author</h4></Col>
+          <Col md={4} className="text-center"><h4>Actions</h4></Col>
+        </Row>
+        <Row className="mb-4">
+          {docs && docs.map((doc, index) => (
             <DocCard
               key={index}
               doc={doc}
+              getDocs={getDocs}
             />
           ))}
+          {(!docs || docs.length == 0) &&
+          <Row>
+            <Col md={12} className="text-center">
+              <h3 className="text-danger">No documents</h3>
+            </Col>
+          </Row>
+          }
         </Row>
         <Row className="text-center">
           <Col>
-            <Button variant="dark"  style={{padding:"5px 40px"}} onClick={() => navigate('/')} >
-                Main
-            </Button>
+            <Button variant="primary" className="m-2" onClick={() => navigate('/create')} >New Document</Button>
+            <Button variant="dark" className="m-2" onClick={() => navigate('/')} >Main</Button>
           </Col>
         </Row>
       </Container>
-      ) : (
-      <Container>
-        <Row>
-          <Col>
-            <h3 className="text-danger">No documents are in the database or Invaild Token</h3>
-            <Button variant="dark" onClick={() => navigate('/')}>Main</Button>
-          </Col>
-        </Row>
-      </Container>
-      )
-    }
     </>
   )
 }
