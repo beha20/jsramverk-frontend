@@ -2,7 +2,6 @@ import React from "react";
 import { useEffect, useState } from "react";
 import parse from "html-react-parser";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import useCurrentUser from "../hooks/useCurrentUser";
 import { ToastContainer, toast } from 'react-toastify';
@@ -13,11 +12,10 @@ const Comment = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [did, setDid] = useState(location.state ? location.state.doc._id : '');
-  const [dname, setDname] = useState(location.state ? location.state.doc.name : '');
-  const [dhtml, setDhtml] = useState(location.state ? location.state.doc.html : '');
-  const [dauthor, setDauthor] = useState(location.state ? location.state.doc.author : '');
-
+  const [did] = useState(location.state ? location.state.doc._id : '');
+  const [dname] = useState(location.state ? location.state.doc.name : '');
+  const [dhtml] = useState(location.state ? location.state.doc.html : '');
+  
   const currentUser = useCurrentUser();
   const { getComments, saveComment, deleteComment } = useComments(currentUser?.accessToken);
 

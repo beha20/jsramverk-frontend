@@ -5,7 +5,7 @@ import jsPDF from "jspdf";
 export const downloadPDF = async () => {
   const pdf = new jsPDF();
   const htmlObject = document.getElementsByTagName('trix-editor')[0];
-  if (htmlObject.childElementCount == 0) {
+  if (htmlObject.childElementCount === 0) {
     return false;
   }
 

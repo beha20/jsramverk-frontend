@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { TrixEditor } from "react-trix";
-import { io } from "socket.io-client";
 import useCurrentUser from "../hooks/useCurrentUser";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,25 +13,17 @@ import { javascript } from '@codemirror/lang-javascript';
 
 const EditDoc = () => {
   const baseUrl = process.env.REACT_APP_BASE_URL;
-  const socket = io.connect(baseUrl);
   const location = useLocation();
   const navigate = useNavigate();
   const currentUser = useCurrentUser();
   const [saving, setSaving] = useState(false);
-  const [did, setDid] = useState(location.state ? location.state.doc._id : '');
+  const [did] = useState(location.state ? location.state.doc._id : '');
   const [dname, setDname] = useState(location.state ? location.state.doc.name : '');
   const [dcontent, setDcontent] = useState(location.state ? location.state.doc.html : '');
-  const [dauthor, setDauthor] = useState(location.state ? location.state.doc.author : '');
+  const [dauthor] = useState(location.state ? location.state.doc.author : '');
   const [dtype, setDtype] = useState(location.state ? location.state.doc.type : '');
   const [runCodeResult, setRunCodeResult] = useState('');
   const [isRunCode, setIsRunCode] = useState(false);
-
-  function setInputText(text) {
-    let element = document.querySelector("trix-editor");
-    element.value = "";
-    element.editor.setSelectedRange([0, 0]);
-    element.editor.insertHTML(text);
-  }
 
   const handleMirrorChange = (value, viewUpdate) => {
     setDcontent(value);
@@ -159,21 +150,7 @@ const EditDoc = () => {
     if (!currentUser || currentUser === {}) {
       navigate("/signin");
     }
-
-    // if (did !== "") {
-    //   socket.emit("create", did);
-    // }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (did !== "") {
-      // socket.on("update", (data) => {
-      //   setInputText(data.html);
-      // });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [socket]);
+  }, [currentUser, navigate]);
 
   const signout = () => {
     localStorage.removeItem("user");

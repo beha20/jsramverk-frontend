@@ -4,7 +4,6 @@ import DocCard from "../components/DocCard";
 import useCurrentUser from "../hooks/useCurrentUser";
 import {useNavigate} from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useDocuments from "../hooks/useDocuments";
@@ -34,6 +33,7 @@ const DocList = () => {
     }
     
     getDocs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -60,7 +60,7 @@ const DocList = () => {
               getDocs={getDocs}
             />
           ))}
-          {(!docs || docs.length == 0) &&
+          {(!docs || docs.length === 0) &&
           <Row>
             <Col md={12} className="text-center">
               <h3 className="text-danger">No documents</h3>

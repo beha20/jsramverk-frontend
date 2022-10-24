@@ -11,6 +11,7 @@ function Main() {
     if (!currentUser || currentUser === {}) {
       navigate("/signin");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   
   const signout = (e) => {
